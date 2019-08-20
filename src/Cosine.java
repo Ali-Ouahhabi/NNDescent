@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author Admin
  */
-public class Cosine implements Similarity {
+public class Cosine implements Similarity<Double> {
 
     @Override
     public Double similarityComputing(List<Double> profile1, List<Double> profile2) {

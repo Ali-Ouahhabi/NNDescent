@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class Euclidean implements Similarity {
+public class Euclidean implements Similarity<Double> {
 
     @Override
     public Double similarityComputing(List<Double> profile1, List<Double> profile2) {
