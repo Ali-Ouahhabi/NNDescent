@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author Admin
  */
-public interface Similarity {
+public interface Similarity<T> {
     //interface to reference the object with the similarity algorithm  
-    public Double similarityComuting(List<Double> p1, List<Double> p2);
+    public Double similarityComputing(List<T> p1, List<T> p2);
 }
