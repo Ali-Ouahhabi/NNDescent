@@ -2,16 +2,16 @@
 import java.util.*;
 import java.util.Map.Entry;
 
-public class Node {
+public class Node<T> {
     private static int counter = 0; // id generator
-    private Map<Node, Double> neighbours = new HashMap<Node, Double>();
-    private List<Node> reverse = new ArrayList<Node>();
-    private List<Double> profile;
-    private Set<Node> generalNeighbours = new HashSet<Node>();
+    private Map<Node<T>, Double> neighbours = new HashMap<Node<T>, Double>();
+    private List<Node<T>> reverse = new ArrayList<Node<T>>();
+    private List<T> profile;
+    private Set<Node<T>> generalNeighbours = new HashSet<Node<T>>();
     private int id = 0;
 
     public Node() {
-        this.id = Node.counter;
+        this.id = Node.counter; // generate a node id incrementally (0 to n)
         Node.counter++;
     }
 
@@ -24,18 +24,18 @@ public class Node {
     }
 
     void setReversForNeighbours() {
-
         for (Node neighbour : neighbours.keySet()) {
             neighbour.addRevers(this);
         }
     }
 
     void setGeneralNeighbours() {
-        Set<Node> tmpNeighbours = new HashSet(neighbours.keySet());
-        Set<Node> tmpReverse = new HashSet(reverse);
+        Set<Node<T>> tmpNeighbours = new HashSet(neighbours.keySet());
+        Set<Node<T>> tmpReverse = new HashSet(reverse);
         generalNeighbours.addAll(tmpNeighbours);
         generalNeighbours.addAll(tmpReverse);
-        if (generalNeighbours.contains(this)) generalNeighbours.remove(this);
+        if (generalNeighbours.contains(this))
+            generalNeighbours.remove(this);
     }
 
     public void addRevers(Node aReverse) {
@@ -48,11 +48,11 @@ public class Node {
     }
 
     // farest Neighbour: the neighbour with the biggest similarity
-    public Entry<Node, Double> getFarestNeighbour() {
+    public Entry<Node<T>, Double> getFarestNeighbour() {
         Iterator tmp = neighbours.entrySet().iterator();
-        Entry<Node, Double> max = (Entry<Node, Double>) tmp.next();
+        Entry<Node<T>, Double> max = (Entry<Node<T>, Double>) tmp.next();
         while (tmp.hasNext()) {
-            Entry<Node, Double> nxt = (Entry<Node, Double>) tmp.next();
+            Entry<Node<T>, Double> nxt = (Entry<Node<T>, Double>) tmp.next();
             if (nxt.getValue() > max.getValue()) max = nxt;
         }
         return max;
@@ -63,7 +63,7 @@ public class Node {
         System.out.println("nndescent.Node.printGeneralNeighbours()");
         System.out.println("this " + printProfile());
 
-        for (Node n : generalNeighbours) {
+        for (Node<T> n : generalNeighbours) {
             System.out.println("\t" + n.printProfile());
         }
     }
@@ -71,7 +71,7 @@ public class Node {
     public void printNeighbours() {
 
         System.out.println("this " + printProfile());
-        for (Map.Entry<Node, Double> a : neighbours.entrySet()) {
+        for (Map.Entry<Node<T>, Double> a : neighbours.entrySet()) {
             System.out.println("\t node " + a.getKey().printProfile() + " similarity " + a.getValue());
         }
     }
@@ -92,41 +92,41 @@ public class Node {
     public void printRevers() {
         System.out.println("REVERS");
         System.out.println("node :" + this.printProfile());
-        for (Node n : reverse) {
+        for (Node<T> n : reverse) {
             System.out.println("\t " + n.printProfile());
         }
 
     }
 
-    public Map<Node, Double> getNeighbours() {
+    public Map<Node<T>, Double> getNeighbours() {
         return neighbours;
     }
 
-    public void setNeighbours(Map<Node, Double> neighbours) {
+    public void setNeighbours(Map<Node<T>, Double> neighbours) {
         this.neighbours = neighbours;
     }
 
-    public List<Node> getReverse() {
+    public List<Node<T>> getReverse() {
         return reverse;
     }
 
-    public void setReverse(List<Node> reverse) {
+    public void setReverse(List<Node<T>> reverse) {
         this.reverse = reverse;
     }
 
-    public Set<Node> getGeneralNeighbours() {
+    public Set<Node<T>> getGeneralNeighbours() {
         return generalNeighbours;
     }
 
-    public void setGeneralNeighbours(Set<Node> generalNeighbours) {
+    public void setGeneralNeighbours(Set<Node<T>> generalNeighbours) {
         this.generalNeighbours = generalNeighbours;
     }
 
-    public List<Double> getProfile() {
+    public List<T> getProfile() {
         return profile;
     }
 
-    public void setProfile(List<Double> profile) {
+    public void setProfile(List<T> profile) {
         this.profile = profile;
     }
 }
