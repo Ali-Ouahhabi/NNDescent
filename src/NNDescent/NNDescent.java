@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 
 public class NNDescent {
 
-    private Similarity similarity;
     private List<Node> graph = new ArrayList<>();
     private int k;
 
@@ -92,9 +91,5 @@ public class NNDescent {
             System.out.printf("%s, Neighbours are %s\n", v, v.getNeighbours());
         }
     }
-
-    public  double similarity(int type, List profile1, List profile2){
-        // calculate similarity using the value of type.
-        return this.similarity.similarityComputing(profile1,profile2);
-    }
+    
 }
