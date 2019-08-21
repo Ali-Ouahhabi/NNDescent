@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class IrisSet {
 
-    public List<Iris> Set = new ArrayList()<>;
+    public List<Iris> Set = new ArrayList();
 
     public IrisSet(File in) throws FileNotFoundException {
         Scanner sc = new Scanner(in);
@@ -25,7 +25,7 @@ public class IrisSet {
         try {
             IrisSet dataset = new IrisSet(new File("src/datasets/iris_csv.csv"));
             dataset.printAll();
-            NNDescent<Iris> knn = new NNDescent()
+            //NNDescent<Iris> knn = new NNDescent();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
