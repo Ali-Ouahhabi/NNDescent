@@ -19,8 +19,12 @@ public class Node<T> {
         return id;
     }
 
-    void addNeighbours(Node neighbour, Double d) {
-        this.neighbours.put(neighbour, d);
+    boolean addNeighbours(Node neighbour, Double d) {
+        if (this.neighbours.containsKey(neighbour))
+            return false;
+        else
+            this.neighbours.put(neighbour, d);
+        return true;
     }
 
     void setReversForNeighbours() {
@@ -55,6 +59,8 @@ public class Node<T> {
             Entry<Node<T>, Double> nxt = (Entry<Node<T>, Double>) tmp.next();
             if (nxt.getValue() > max.getValue()) max = nxt;
         }
+        //this.printNeighbours();
+       // System.out.println("it farest neighbor "+max.getKey().getId());
         return max;
     }
 
@@ -70,9 +76,9 @@ public class Node<T> {
 
     public void printNeighbours() {
 
-        System.out.println("this " + printProfile());
+        System.out.println("this " + this.id);
         for (Map.Entry<Node<T>, Double> a : neighbours.entrySet()) {
-            System.out.println("\t node " + a.getKey().printProfile() + " similarity " + a.getValue());
+            System.out.println("\t node " + a.getKey().getId() + " similarity " + a.getValue());
         }
     }
 
