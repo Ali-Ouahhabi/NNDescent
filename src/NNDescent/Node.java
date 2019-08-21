@@ -1,3 +1,4 @@
+package NNDescent;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -119,7 +120,7 @@ public class Node {
     }
 
     public void printGeneralNeighbours() {
-        System.out.println("nndescent.Node.printGeneralNeighbours()");
+        System.out.println("nndescent.NNDescent.Node.printGeneralNeighbours()");
         System.out.println("this " + printProfile());
 
         for (Node n : generalNeighbours) {
@@ -147,6 +148,6 @@ public class Node {
 
     @Override
     public String toString() {
-        return "Node{" + this.id + "}";
+        return "NNDescent.Node{" + this.id + "}";
     }
 }

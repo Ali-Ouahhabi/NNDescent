@@ -1,3 +1,6 @@
+import NNDescent.NNDescent;
+import NNDescent.Node;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,17 +17,18 @@ public class Main {
         int similarity = 2;
         Similarity<Double> cosine = new Cosine<>();
         // number of neighbors;
-        int k = 3;
+        int k = 2;
         NNDescent<Double> knn = new NNDescent<>(Main.readCSV("src/datasets/data.csv"),k,cosine);
 
         // Generate BruteForce graph from dataset
-        //List<Node> KNNBruteForceGraph = BruteForceKNN.getKNN(readCSV("datasets/data.csv"), k, similarity);
+        //List<NNDescent.Node> KNNBruteForceGraph = BruteForceKNN.getKNN(readCSV("datasets/data.csv"), k, similarity);
         // BruteForceKNN.printNodes(KNNBruteForceGraph);
 
-        // Generate NNDescent graph from dataset
+        // Generate NNDescent.NNDescent graph from dataset
         List<Node<Double>> KNNDescentGraph = knn.getKNN();
+        System.out.println("------------------------------------------------");
         for( Node<Double> n : KNNDescentGraph) {
-             if(n.getId()<10) n.printNeighbours();
+             if(n.getId()<3) n.printNeighbours();
         }
 
         //double precision = precision(KNNDescentGraph, KNNBruteForceGraph);
@@ -35,18 +39,18 @@ public class Main {
 
     }
 /*
-    private static double precision(List<Node> knnDescentGraph, List<Node> knnBruteForceGraph) {
+    private static double precision(List<NNDescent.Node> knnDescentGraph, List<NNDescent.Node> knnBruteForceGraph) {
         // relevant items / sample items
         int similar = 0; // similar neighbors for each node in both graphs.
         int size = 0; // size of neighbors of all nodes
-        for (Node node : knnDescentGraph) {
-            for (Node entryD : node.getNeighbours().keySet()) {
+        for (NNDescent.Node node : knnDescentGraph) {
+            for (NNDescent.Node entryD : node.getNeighbours().keySet()) {
                 size++;
-                Node bruteForceNode = getNodeFromGraph(knnBruteForceGraph, node.getId());
+                NNDescent.Node bruteForceNode = getNodeFromGraph(knnBruteForceGraph, node.getId());
                 if (bruteForceNode == null) {
                     break;
                 }
-                for (Node entryB : bruteForceNode.getNeighbours().keySet()) {
+                for (NNDescent.Node entryB : bruteForceNode.getNeighbours().keySet()) {
                     // comparing neighbors ids in both graphs
                     if (entryD.getId() == entryB.getId()) {
                         similar++;
