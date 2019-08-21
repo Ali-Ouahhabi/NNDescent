@@ -1,47 +1,51 @@
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
 
 
-public class NNDescent<T> {
+public class NNDescent {
 
-    private Similarity<T> similarity;
-    private List<Node<T>> graph;
+    private Similarity similarity;
+    private List<Node> graph = new ArrayList<>();
     private int k;
 
-    NNDescent(List<Node<T>> graph, int k, Similarity<T> similarity){
-        this.graph = graph;
+    NNDescent(List<Profile> profiles, int k){
+        for(Profile profile : profiles)
+        this.graph.add(new Node(profile));
         this.k=k;
-        this.similarity=similarity;
     }
-    public List<Node<T>> getKNN() {
+
+    public List<Node> getKNN() {
 
         // get a simple from :graph
         sample();
-        for( Node<T> n : this.graph) {
-            if(n.getId() < 10)
-                n.printNeighbours();
+        for( Node n : this.graph) {
+            if(n.getId() < 20)
+                System.out.println("0,"+n.State());;
         }
-        System.out.println("*******************************");
         //counter to check if there has been any new update
         int c;
+        int i=0;
         do {
             //reverse then General Neighbours calculation for all the node
             this.graph.stream().forEach(n->n.setReversForNeighbours());
             this.graph.parallelStream().forEach(n->n.setGeneralNeighbours());
             // initiating the counter for the updated neighbours
             c = 0;
-            for (Node<T> v : this.graph) {
-                for (Node<T> u1 : v.getGeneralNeighbours()) {
+            for (Node v : this.graph) {
+                for (Node u1 : v.getGeneralNeighbours()) {
                     if (u1.getGeneralNeighbours().contains(v)) u1.getGeneralNeighbours().remove(v);
-                    for (Node<T> u2 : u1.getGeneralNeighbours()) {
+                    for (Node u2 : u1.getGeneralNeighbours()) {
                         // looking for neighbours in my neighbours neighbours
-                        Double l = this.similarity.similarityComputing(v.getProfile(), u2.getProfile());
+                        Double l = v.similarity(u2);
                         c += UpdateNN(v, u2, l);
                     }
                 }
+            }
+            i++;
+            for( Node n : this.graph) {
+                if(n.getId() < 20)
+                    System.out.println(i+","+n.State());;
             }
         } while (c != 0);
 //        printNodes(nodes);
@@ -54,21 +58,19 @@ public class NNDescent<T> {
         for(Node n : this.graph){
             int c = 0;
             while(c<this.k){
-                int i = (int) (Math.random() * graph.size());
-                Node u = this.graph.get(i);
-                if(n.addNeighbours(u,this.similarity.similarityComputing(n.getProfile(),u.getProfile())))
-                    c++;
+                Node u = this.graph.get((int) (Math.random() * graph.size()));
+                if(n.addNeighbours(u,n.similarity(u))) c++;
             }
         }
     }
 
-    public int UpdateNN(Node<T> h, Node u, Double l) {
+    public int UpdateNN(Node h, Node u, Double l) {
         if (h.getNeighbours().containsKey(u)) {
             //u is already in the neighbours no change needed
             return 0;
         } else {
             //getting the farest neighbours to H in it list of nodes
-            Entry<Node<T>, Double> max = h.getFarestNeighbour();
+            Entry<Node, Double> max = h.getFarestNeighbour();
             /*checking if u is closer than the farest neighbour, */
             if (l < max.getValue()) {
                 /*if it's the case replace the farest by the new one*/
@@ -83,13 +85,13 @@ public class NNDescent<T> {
         }
     }
 
-    public <T> void printNodes(List<Node<T>> nodes) {
+    public  void printNodes(List<Node> nodes) {
         for (Node v : nodes) {
             System.out.printf("%s, Neighbours are %s\n", v, v.getNeighbours());
         }
     }
 
-    public <T> double similarity(int type, List<T> profile1, List<T> profile2){
+    public  double similarity(int type, List profile1, List profile2){
         // calculate similarity using the value of type.
         return this.similarity.similarityComputing(profile1,profile2);
     }
