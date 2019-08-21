@@ -1,16 +1,12 @@
 import NNDescent.NNDescent;
 import NNDescent.Node;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
-import java.util.Scanner;
+
 
 public class Main {
-
+/*
     public static void main(String[] args) {
 
         // Similarity type [1: Euclidean, 2: Cosine ]
@@ -18,16 +14,16 @@ public class Main {
         Similarity<Double> cosine = new Cosine<>();
         // number of neighbors;
         int k = 2;
-        NNDescent<Double> knn = new NNDescent<>(Main.readCSV("src/datasets/data.csv"),k,cosine);
+        NNDescent knn = new NNDescent(Main.readCSV("src/datasets/data.csv"),k,cosine);
 
         // Generate BruteForce graph from dataset
         //List<NNDescent.Node> KNNBruteForceGraph = BruteForceKNN.getKNN(readCSV("datasets/data.csv"), k, similarity);
         // BruteForceKNN.printNodes(KNNBruteForceGraph);
 
         // Generate NNDescent.NNDescent graph from dataset
-        List<Node<Double>> KNNDescentGraph = knn.getKNN();
+        List<Node> KNNDescentGraph = knn.getKNN();
         System.out.println("------------------------------------------------");
-        for( Node<Double> n : KNNDescentGraph) {
+        for( Node n : KNNDescentGraph) {
              if(n.getId()<3) n.printNeighbours();
         }
 
@@ -71,10 +67,10 @@ public class Main {
         }
         return null;
     }
+/*
+    public static List<Node> readCSV(String file) {
 
-    public static List<Node<Double>> readCSV(String file) {
-
-        List<Node<Double>> nodes = new ArrayList<>();
+        List<Node> nodes = new ArrayList<>();
         Node.resetCounter();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -110,6 +106,6 @@ public class Main {
 
         return nodes;
     }
-
+*/
 
 }

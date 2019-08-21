@@ -130,9 +130,9 @@ public class Node {
 
     public void printNeighbours() {
 
-        System.out.println("this " + this.id);
+        System.out.println("this " + this.id +" info "+this.getProfile().toString());
         for (Map.Entry<Node, Double> a : neighbours.entrySet()) {
-            System.out.println("\t node " + a.getKey().getId() + " similarity " + a.getValue());
+            System.out.println("\t "+a.getKey().getId()+" similarity " + a.getValue() + " n "+a.getKey().getProfile().toString());
         }
     }
 

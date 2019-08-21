@@ -10,7 +10,7 @@ public class NNDescent {
     private List<Node> graph = new ArrayList<>();
     private int k;
 
-    NNDescent(List<Profile> profiles, int k){
+    public NNDescent(List<Profile> profiles, int k){
         for(Profile profile : profiles)
         this.graph.add(new Node(profile));
         this.k=k;
@@ -44,12 +44,12 @@ public class NNDescent {
                 }
             }
             i++;
-            for( Node n : this.graph) {
-                if(n.getId() < 20)
-                    System.out.println(i+","+n.State());;
-            }
+
         } while (c != 0);
-//        printNodes(nodes);
+        for( Node n : this.graph) {
+
+                n.printNeighbours();
+        }
         return this.graph;
     }
 

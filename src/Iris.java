@@ -1,9 +1,11 @@
+import NNDescent.Profile;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.Double;
 import java.util.ListIterator;
 
-public class Iris {
+public class Iris extends Profile {
 
     public List<Double> profile = new ArrayList<>();
     public String label;
@@ -19,11 +21,22 @@ public class Iris {
     }
 
     @Override
+    public Double similarity(Profile profile){
+        Double tmp=0.0;
+        //manhattan distance
+        for(int i=0; i<this.profile.size(); i++){
+            tmp+=Math.abs(this.profile.get(i)-((Iris) profile).profile.get(i));
+        }
+
+        return tmp;
+    }
+
+
     public String toString() {
         String tmp = "";
-        for (Double d : this.profile ){
+       /* for (Double d : this.profile ){
             tmp += d+" : ";
-        }
+        }*/
         tmp += this.label;
         return tmp;
     }
