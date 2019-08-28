@@ -21,19 +21,17 @@ public class IrisSet {
     public void printAll(){
         for (Profile d : Set){
             System.out.println(d.toString());
-            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         }
     }
     public static void main(String[] args) {
         try {
             IrisSet dataset = new IrisSet(new File("src/datasets/iris_csv.csv"));
-            dataset.printAll();
-            NNDescent knn = new NNDescent(dataset.Set,5);
+           // dataset.printAll();
+            NNDescent knn = new NNDescent(dataset.Set,3);
             knn.getKNN();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
-
 }

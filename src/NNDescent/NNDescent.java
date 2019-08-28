@@ -20,10 +20,6 @@ public class NNDescent {
 
         // get a simple from :graph
         sample();
-        for( Node n : this.graph) {
-            if(n.getId() < 20)
-                System.out.println("0,"+n.State());;
-        }
         //counter to check if there has been any new update
         int c;
         int i=0;
@@ -47,7 +43,6 @@ public class NNDescent {
 
         } while (c != 0);
         for( Node n : this.graph) {
-
                 n.printNeighbours();
         }
         return this.graph;
