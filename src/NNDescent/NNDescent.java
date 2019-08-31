@@ -17,7 +17,7 @@ public class NNDescent {
     }
 
     public List<Node> getKNN() {
-
+        double time = System.currentTimeMillis();
         // get a simple from :graph
         sample();
         //counter to check if there has been any new update
@@ -26,7 +26,7 @@ public class NNDescent {
         do {
             //reverse then General Neighbours calculation for all the node
             this.graph.stream().forEach(n->n.setReversForNeighbours());
-            this.graph.parallelStream().forEach(n->n.setGeneralNeighbours());
+            this.graph.stream().forEach(n->n.setGeneralNeighbours());
             // initiating the counter for the updated neighbours
             c = 0;
             for (Node v : this.graph) {
@@ -45,6 +45,7 @@ public class NNDescent {
         for( Node n : this.graph) {
                 n.printNeighbours();
         }
+        System.out.println("time "+(System.currentTimeMillis()-time));
         return this.graph;
     }
 
@@ -65,7 +66,7 @@ public class NNDescent {
             //u is already in the neighbours no change needed
             return 0;
         } else {
-            //getting the farest neighbours to H in it list of nodes
+            //getting the farest neighbours to h
             Entry<Node, Double> max = h.getFarestNeighbour();
             /*checking if u is closer than the farest neighbour, */
             if (l < max.getValue()) {

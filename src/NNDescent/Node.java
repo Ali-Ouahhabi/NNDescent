@@ -49,7 +49,7 @@ public class Node {
             generalNeighbours.remove(this);
     }
 
-    public void addRevers(Node aReverse) {
+    synchronized public void addRevers(Node aReverse) {
         this.reverse.add(aReverse);
     }
 
