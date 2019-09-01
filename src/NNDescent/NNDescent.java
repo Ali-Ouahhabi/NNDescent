@@ -31,7 +31,7 @@ public class NNDescent {
             c = 0;
             for (Node v : this.graph) {
                 for (Node u1 : v.getGeneralNeighbours()) {
-                    if (u1.getGeneralNeighbours().contains(v)) u1.getGeneralNeighbours().remove(v);
+                    u1.getGeneralNeighbours().remove(v);
                     for (Node u2 : u1.getGeneralNeighbours()) {
                         // looking for neighbours in my neighbours neighbours
                         Double l = v.similarity(u2);

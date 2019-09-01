@@ -45,11 +45,10 @@ public class Node {
         Set<Node> tmpReverse = new HashSet(reverse);
         generalNeighbours.addAll(tmpNeighbours);
         generalNeighbours.addAll(tmpReverse);
-        if (generalNeighbours.contains(this))
-            generalNeighbours.remove(this);
+        generalNeighbours.remove(this);
     }
 
-    synchronized public void addRevers(Node aReverse) {
+    public void addRevers(Node aReverse) {
         this.reverse.add(aReverse);
     }
 
