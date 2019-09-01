@@ -27,7 +27,7 @@ public class Node {
     }
 
     boolean addNeighbours(Node neighbour, Double d) {
-        if (this.neighbours.containsKey(neighbour))
+        if (this.neighbours.containsKey(neighbour) || this == neighbour)
             return false;
         else
             this.neighbours.put(neighbour, d);
