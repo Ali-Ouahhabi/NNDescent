@@ -24,11 +24,17 @@ public class NNDescent {
         int c;
         int i=0;
         do {
+            double t = System.currentTimeMillis();
             //reverse then General Neighbours calculation for all the node
-            this.graph.stream().forEach(n->n.setReversForNeighbours());
-            this.graph.stream().forEach(n->n.setGeneralNeighbours());
+            this.graph.parallelStream().forEach(n->n.setReversForNeighbours());
+            System.out.println("Reverse;"+(System.currentTimeMillis()-t));
+            t = System.currentTimeMillis();
+            this.graph.parallelStream().forEach(n->n.setGeneralNeighbours());
+            System.out.println("General;"+(System.currentTimeMillis()-t));
+
             // initiating the counter for the updated neighbours
             c = 0;
+            double Tloop = System.currentTimeMillis();
             for (Node v : this.graph) {
                 for (Node u1 : v.getGeneralNeighbours()) {
                     u1.getGeneralNeighbours().remove(v);
@@ -39,13 +45,14 @@ public class NNDescent {
                     }
                 }
             }
+            System.out.println("Tloop;"+i+";"+(System.currentTimeMillis()-Tloop));
             i++;
 
         } while (c != 0);
-        for( Node n : this.graph) {
+        /*for( Node n : this.graph) {
                 n.printNeighbours();
-        }
-        System.out.println("time "+(System.currentTimeMillis()-time));
+        }*/
+        System.out.println("time;"+(System.currentTimeMillis()-time));
         return this.graph;
     }
 

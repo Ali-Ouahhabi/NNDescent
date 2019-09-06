@@ -7,7 +7,7 @@ public class Node {
 
     private static int counter = 0; // id generator
     private Map<Node, Double> neighbours = new HashMap<Node, Double>();
-    private List<Node> reverse = new ArrayList<Node>();
+    private List<Node> reverse = new Vector<Node>();
     private Profile profile;
     private Set<Node> generalNeighbours = new HashSet<Node>();
     private int id = 0;
