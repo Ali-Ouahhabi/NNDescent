@@ -41,11 +41,8 @@ public class Node {
     }
 
     void setGeneralNeighbours() {
-        Set<Node> tmpNeighbours = new HashSet(neighbours.keySet());
-        Set<Node> tmpReverse = new HashSet(reverse);
-        generalNeighbours.addAll(tmpNeighbours);
-        generalNeighbours.addAll(tmpReverse);
-        generalNeighbours.remove(this);
+        generalNeighbours.addAll(neighbours.keySet());
+        generalNeighbours.addAll(reverse);
     }
 
     public void addRevers(Node aReverse) {
