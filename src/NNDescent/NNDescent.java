@@ -20,36 +20,36 @@ public class NNDescent {
         // get a simple from :graph
         sample();
         //counter to check if there has been any new update
-        AtomicInteger c = new AtomicInteger();
+        int c;
         int i=0;
         do {
             double t = System.currentTimeMillis();
             //reverse then General Neighbours calculation for all the node
-            this.graph.parallelStream().forEach(n->n.setReversForNeighbours());
+            this.graph.parallelStream().forEach(n->{
+                n.setKnown(new HashSet<Node>());
+                n.setReversForNeighbours();
+            });
             System.out.println("Reverse;"+(System.currentTimeMillis()-t));
             t = System.currentTimeMillis();
             this.graph.parallelStream().forEach(n->n.setGeneralNeighbours());
             System.out.println("General;"+(System.currentTimeMillis()-t));
 
             // initiating the counter for the updated neighbours
-            c.set(0);
+            c=0;
             double Tloop = System.currentTimeMillis();
-            this.graph.parallelStream ().forEach( v -> {
+            for(Node v: this.graph){
                 for (Node u1 : v.getGeneralNeighbours()) {
-                    Set<Node> prev = new HashSet<Node>(this.k);
                     for (Node u2 : u1.getGeneralNeighbours()) {
                         // looking for neighbours in my neighbours neighbours
-                        if(prev.add(u2)){
                             Double l = v.similarity(u2);
-                            c.addAndGet(v.updateNeighbours(u2, l));
+                            c+=v.updateNeighbours(u2, l);
                            // System.out.println("c = "+c+" node "+u2.getId());
-                        }
                     }
                 }
-            });
+            }
             System.out.println("Tloop;"+i+";"+(System.currentTimeMillis()-Tloop));
             i++;
-        } while (c.get() != 0);
+        } while (c!= 0);
         /*for( Node n : this.graph) {
                 n.printNeighbours();
         }*/

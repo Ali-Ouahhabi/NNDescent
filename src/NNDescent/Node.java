@@ -6,11 +6,11 @@ import java.util.Map.Entry;
 public class Node {
 
     private static int counter = 0; // id generator
-    //private Map<Node, Double> neighbours = new HashMap<Node, Double>();
     private TreeMap<Double,Set<Node>> neighbours=new TreeMap<Double,Set<Node>>();
     private Set<Node> reverse = new HashSet<Node>();
     private Profile profile;
     private Set<Node> generalNeighbours = new HashSet<Node>();
+    private Set<Node> known;
     private int id = 0;
 
     public Node(Profile profile,int k) {
@@ -136,7 +136,15 @@ public class Node {
         this.profile = profile;
     }
 
-//----------------------------------------------------------------------------------------------
+    public Set<Node> getKnown() {
+        return known;
+    }
+
+    public void setKnown(Set<Node> known) {
+        this.known = known;
+    }
+
+    //----------------------------------------------------------------------------------------------
 
     public String printProfile() {
         return this.getId()+" "+this.profile.toString();
