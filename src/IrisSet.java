@@ -27,7 +27,7 @@ public class IrisSet {
         try {
             IrisSet dataset = new IrisSet(new File("src/datasets/iris_csv.csv"));
            // dataset.printAll();
-            NNDescent knn = new NNDescent(dataset.Set,30);
+            NNDescent knn = new NNDescent(dataset.Set,3);
             knn.getKNN();
 
         } catch (FileNotFoundException e) {

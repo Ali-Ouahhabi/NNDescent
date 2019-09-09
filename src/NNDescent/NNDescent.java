@@ -1,7 +1,6 @@
 package NNDescent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 
 
@@ -12,7 +11,7 @@ public class NNDescent {
 
     public NNDescent(List<Profile> profiles, int k){
         for(Profile profile : profiles)
-        this.graph.add(new Node(profile));
+        this.graph.add(new Node(profile,k));
         this.k=k;
     }
 
@@ -37,17 +36,19 @@ public class NNDescent {
             double Tloop = System.currentTimeMillis();
             for (Node v : this.graph) {
                 for (Node u1 : v.getGeneralNeighbours()) {
-                    u1.getGeneralNeighbours().remove(v);
+                    Set<Node> prev = new HashSet<Node>(this.k);
                     for (Node u2 : u1.getGeneralNeighbours()) {
                         // looking for neighbours in my neighbours neighbours
-                        Double l = v.similarity(u2);
-                        c += UpdateNN(v, u2, l);
+                        if(prev.add(u2)){
+                            Double l = v.similarity(u2);
+                            c += v.updateNeighbours(u2,l);
+                           // System.out.println("c = "+c+" node "+u2.getId());
+                        }
                     }
                 }
             }
             System.out.println("Tloop;"+i+";"+(System.currentTimeMillis()-Tloop));
             i++;
-
         } while (c != 0);
         /*for( Node n : this.graph) {
                 n.printNeighbours();
@@ -62,31 +63,33 @@ public class NNDescent {
         for(Node n : this.graph){
             int c = 0;
             while(c<this.k){
-                Node u = this.graph.get((int) (Math.random() * graph.size()));
-                if(n.addNeighbours(u,n.similarity(u))) c++;
+                Node u = this.graph.get((int) (Math.random() * size));
+                if(n.addNeighbour(u,n.similarity(u))) c++;
             }
         }
     }
 
     public int UpdateNN(Node h, Node u, Double l) {
+        return h.updateNeighbours(u,l);
+        /*
         if (h.getNeighbours().containsKey(u)) {
             //u is already in the neighbours no change needed
             return 0;
         } else {
             //getting the farest neighbours to h
             Entry<Node, Double> max = h.getFarestNeighbour();
-            /*checking if u is closer than the farest neighbour, */
+            /*checking if u is closer than the farest neighbour,
             if (l < max.getValue()) {
-                /*if it's the case replace the farest by the new one*/
+                /*if it's the case replace the farest by the new one
 
                 h.getNeighbours().remove(max.getKey());
                 h.getNeighbours().put(u, l);
                 return 1;
             } else
-                /*if it is not, no changes are done*/
+                /*if it is not, no changes are done
                 return 0;
 
-        }
+        }*/
     }
 
     public  void printNodes(List<Node> nodes) {

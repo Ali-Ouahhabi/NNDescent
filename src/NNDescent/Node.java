@@ -6,13 +6,14 @@ import java.util.Map.Entry;
 public class Node {
 
     private static int counter = 0; // id generator
-    private Map<Node, Double> neighbours = new HashMap<Node, Double>();
-    private List<Node> reverse = new Vector<Node>();
+    //private Map<Node, Double> neighbours = new HashMap<Node, Double>();
+    private TreeMap<Double,Set<Node>> neighbours=new TreeMap<Double,Set<Node>>();
+    private Set<Node> reverse = new HashSet<Node>();
     private Profile profile;
     private Set<Node> generalNeighbours = new HashSet<Node>();
     private int id = 0;
 
-    public Node(Profile profile) {
+    public Node(Profile profile,int k) {
         this.profile = profile;
         this.id = Node.counter; // generate a node id incrementally (0 to n)
         Node.counter++;
@@ -26,23 +27,62 @@ public class Node {
         return id;
     }
 
-    boolean addNeighbours(Node neighbour, Double d) {
-        if (this.neighbours.containsKey(neighbour) || this == neighbour)
-            return false;
-        else
-            this.neighbours.put(neighbour, d);
-        return true;
+    int updateNeighbours(Node neighbour, Double d){
+        // assume that N is sorted
+        if(neighbour == this) return 0;
+        if(d<this.neighbours.lastKey()){
+            if(this.neighbours.containsKey(d))
+                if(this.neighbours.get(d).add(neighbour)) {
+                    Map.Entry<Double,Set<Node>> max = this.neighbours.lastEntry();
+                    if(max.getValue().size()==1) this.neighbours.pollLastEntry();
+                    else try {
+                        max.getValue().iterator().remove();
+                    }catch (UnsupportedOperationException | IllegalStateException e){
+                        System.err.println(e.getMessage());
+                    }                    return 1;
+                }
+                else return 0;
+            else {
+                Set<Node> tmp = new HashSet<Node>();
+                tmp.add(neighbour);
+                this.neighbours.put(d,tmp);
+                Map.Entry<Double,Set<Node>> max = this.neighbours.lastEntry();
+                if(max.getValue().size()==1) this.neighbours.pollLastEntry();
+                else try {
+                    max.getValue().iterator().remove();
+                }catch (UnsupportedOperationException | IllegalStateException e){
+                    System.err.println(e.getMessage());
+                }
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    boolean addNeighbour(Node neighbour, Double d){
+        // assume that N is sorted
+            if(this.neighbours.containsKey(d))
+                if(this.neighbours.get(d).add(neighbour)) return true;
+                else return false;
+            else {
+                Set<Node> tmp = new HashSet<Node>();
+                tmp.add(neighbour);
+                this.neighbours.put(d,tmp);
+                return true;
+            }
     }
 
     void setReversForNeighbours() {
-        for (Node neighbour : neighbours.keySet()) {
-            neighbour.addRevers(this);
+        for (Map.Entry<Double,Set<Node>> neighbour : neighbours.entrySet()) {
+            for(Node e : neighbour.getValue()) e.addRevers(this);
         }
     }
 
     void setGeneralNeighbours() {
-        generalNeighbours.addAll(neighbours.keySet());
+        for (Map.Entry<Double,Set<Node>> neighbour : neighbours.entrySet())
+            generalNeighbours.addAll(neighbour.getValue());
         generalNeighbours.addAll(reverse);
+        generalNeighbours.remove(this);
     }
 
     public void addRevers(Node aReverse) {
@@ -50,7 +90,7 @@ public class Node {
     }
 
 
-    // farest Neighbour: the neighbour with the biggest similarity
+    /* farest Neighbour: the neighbour with the biggest similarity
     public Entry<Node, Double> getFarestNeighbour() {
         Iterator tmp = neighbours.entrySet().iterator();
         Entry<Node, Double> max = (Entry<Node, Double>) tmp.next();
@@ -61,26 +101,26 @@ public class Node {
         //this.printNeighbours();
        // System.out.println("it farest neighbor "+max.getKey().getId());
         return max;
-    }
+    }*/
 
 
     public static void resetCounter(){
         Node.counter = 0;
     }
 
-    public Map<Node, Double> getNeighbours() {
+    public TreeMap<Double, Set<Node>> getNeighbours() {
         return neighbours;
     }
 
-    public void setNeighbours(Map<Node, Double> neighbours) {
+    public void setNeighbours(TreeMap<Double, Set<Node>> neighbours) {
         this.neighbours = neighbours;
     }
 
-    public List<Node> getReverse() {
+    public Set<Node> getReverse() {
         return reverse;
     }
 
-    public void setReverse(List<Node> reverse) {
+    public void setReverse(Set<Node> reverse) {
         this.reverse = reverse;
     }
 
@@ -103,7 +143,7 @@ public class Node {
 //----------------------------------------------------------------------------------------------
 
     public String printProfile() {
-        return profile.toString();
+        return this.getId()+" "+this.profile.toString();
     }
 
     public void printRevers() {
@@ -116,7 +156,6 @@ public class Node {
     }
 
     public void printGeneralNeighbours() {
-        System.out.println("nndescent.NNDescent.Node.printGeneralNeighbours()");
         System.out.println("this " + printProfile());
 
         for (Node n : generalNeighbours) {
@@ -127,20 +166,12 @@ public class Node {
     public void printNeighbours() {
 
         System.out.println("this " + this.id +" info "+this.getProfile().toString());
-        for (Map.Entry<Node, Double> a : neighbours.entrySet()) {
-            System.out.println("\t "+a.getKey().getId()+" similarity " + a.getValue() + " n "+a.getKey().getProfile().toString());
+        for (Map.Entry<Double,Set<Node>> as : neighbours.entrySet()) {
+            for(Node a: as.getValue())
+            System.out.println("\t "+a.getId()+" similarity " + as.getKey() + " n "+a.getProfile().toString());
         }
     }
 
-    public String State(){
-        String tmp = ""+this.id+",";
-        Double tmp2 = 0.0;
-        for (Map.Entry<Node, Double> a : neighbours.entrySet()){
-            tmp2 += a.getValue();
-        }
-        tmp+=tmp2;
-        return tmp;
-    }
 
     @Override
     public String toString() {
