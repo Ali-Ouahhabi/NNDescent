@@ -35,11 +35,8 @@ public class Node {
                 if(this.neighbours.get(d).add(neighbour)) {
                     Map.Entry<Double,Set<Node>> max = this.neighbours.lastEntry();
                     if(max.getValue().size()==1) this.neighbours.pollLastEntry();
-                    else try {
-                        max.getValue().iterator().remove();
-                    }catch (UnsupportedOperationException | IllegalStateException e){
-                        System.err.println(e.getMessage());
-                    }                    return 1;
+                    else max.getValue().iterator().remove();
+                    return 1;
                 }
                 else return 0;
             else {
@@ -48,10 +45,9 @@ public class Node {
                 this.neighbours.put(d,tmp);
                 Map.Entry<Double,Set<Node>> max = this.neighbours.lastEntry();
                 if(max.getValue().size()==1) this.neighbours.pollLastEntry();
-                else try {
+                else {
+                    max.getValue().iterator().next();
                     max.getValue().iterator().remove();
-                }catch (UnsupportedOperationException | IllegalStateException e){
-                    System.err.println(e.getMessage());
                 }
                 return 1;
             }
